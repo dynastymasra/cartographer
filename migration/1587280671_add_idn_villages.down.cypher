@@ -1,0 +1,1 @@
+MATCH (n:Village) DETACH DELETE n;

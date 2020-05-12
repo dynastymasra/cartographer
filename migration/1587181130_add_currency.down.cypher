@@ -1,0 +1,1 @@
+MATCH (n:Currency) DETACH DELETE n;

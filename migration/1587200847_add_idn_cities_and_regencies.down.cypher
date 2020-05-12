@@ -1,0 +1,3 @@
+MATCH (n:City) DETACH DELETE n;
+
+MATCH (n:Regency) DETACH DELETE n;
