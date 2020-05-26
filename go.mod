@@ -10,4 +10,6 @@ require (
 	github.com/neo4j/neo4j-go-driver v1.7.4
 	github.com/onsi/ginkgo v1.12.2 // indirect
 	github.com/sirupsen/logrus v1.6.0
+	github.com/spf13/viper v1.6.3
+	github.com/stretchr/testify v1.5.1
 )
