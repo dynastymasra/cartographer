@@ -2,7 +2,7 @@ package config
 
 const (
 	ServiceName = "Cartographer"
-	Version     = "1.2.0"
+	Version     = "1.0.0"
 
 	// Service port address
 	envServerPort = "SERVER_PORT"
