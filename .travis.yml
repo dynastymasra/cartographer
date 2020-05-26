@@ -3,6 +3,7 @@ sudo: false
 go:
   - 1.14.x
 install:
+  - apk add --update bash git curl openssh-client ca-certificates git openssl-dev cmake make g++ openssl-libs-static
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
 script:
