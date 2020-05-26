@@ -4,8 +4,8 @@ go:
   - 1.14.x
 install:
   - sudo apt-get update && sudo apt-get install bash git curl openssh-client ca-certificates git libssl-dev cmake make g++
-  - git clone -b v1.7.4 https://github.com/neo4j-drivers/seabolt.git /seabolt
-  - mkdir /seabolt/build && cd /seabolt/build
+  - sudo git clone -b v1.7.4 https://github.com/neo4j-drivers/seabolt.git /seabolt
+  - sudo mkdir /seabolt/build && cd /seabolt/build
   - cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_LIBDIR=lib .. && cmake --build . --target install
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
