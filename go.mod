@@ -18,6 +18,7 @@ require (
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.5.1
+	github.com/urfave/cli/v2 v2.2.0
 	github.com/urfave/negroni v1.0.0
 	gopkg.in/tylerb/graceful.v1 v1.2.15
 )
