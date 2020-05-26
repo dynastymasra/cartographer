@@ -24,8 +24,7 @@ COPY --from=seabolt /seabolt/build/dist-package/seabolt*.tar.gz /tmp
 RUN tar zxf /tmp/seabolt*.tar.gz --strip-components=1 -C /
 
 WORKDIR /go/src/github.com/dynastymasra/cartographer
-COPY go.mod go.sum git-creds.sh ./
-RUN ./git-creds.sh gitlab.com
+COPY go.mod go.sum ./
 RUN go mod download
 
 ## build linux app source code
