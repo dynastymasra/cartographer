@@ -3,7 +3,7 @@ sudo: false
 go:
   - 1.14.x
 install:
-  - apt-get update && apt-get install bash git curl openssh-client ca-certificates git openssl-dev cmake make g++ openssl-libs-static
+  - sudo apt-get update && sudo apt-get install bash git curl openssh-client ca-certificates git openssl-dev cmake make g++ openssl-libs-static
   - git clone -b v1.7.4 https://github.com/neo4j-drivers/seabolt.git /seabolt
   - mkdir /seabolt/build && cd /seabolt/build
   - cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_LIBDIR=lib .. && cmake --build . --target install
