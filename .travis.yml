@@ -45,14 +45,14 @@ jobs:
     - stage: image
       script:
         - docker images
-        - docker tag cartographer $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT .
+        - docker tag cartographer:$TRAVIS_COMMIT $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT .
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
       on:
         tags: false
     - stage: release
       script:
         - docker images
-        - docker tag cartographer $DOCKER_USERNAME/cartographer:$TRAVIS_TAG .
+        - docker tag cartographer:$TRAVIS_COMMIT $DOCKER_USERNAME/cartographer:$TRAVIS_TAG .
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
       on:
         tags: true
