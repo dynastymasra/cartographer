@@ -29,7 +29,7 @@ install:
 stages:
   - test
   - staging
-    if: tag IS blank
+    if: branch = master
   - release
     if: tag IS present
 jobs:
@@ -50,9 +50,6 @@ jobs:
         - docker images
         - docker tag cartographer:$GIT_HASH $DOCKER_USERNAME/cartographer:$GIT_HASH
         - docker push $DOCKER_USERNAME/cartographer:$GIT_HASH
-      branches:
-        only:
-          - master
     - stage: release
       script:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
@@ -60,6 +57,3 @@ jobs:
         - docker images
         - docker tag cartographer:$TRAVIS_TAG $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
-      branches:
-        only:
-          - tags
