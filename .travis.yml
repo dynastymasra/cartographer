@@ -1,7 +1,5 @@
 language: go
-os: linux
 dist: bionic
-sudo: false
 go:
   - 1.14.x
 
@@ -10,19 +8,16 @@ addons:
     packages:
       - libssl1.0.0
 
-stages:
-  - compile
-  - test
-  - build
+before_install:
+  - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+  - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+  - rm seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+install:
+  - git config --global http.https://gopkg.in.followRedirects true
+  - go mod tidy
 
-compile:
-  before_install:
-    - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-    - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-    - rm seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-  install:
-    - git config --global http.https://gopkg.in.followRedirects true
-    - go mod tidy
+stages:
+  - test
 
 test:
   script:
@@ -36,4 +31,4 @@ test:
 
 jobs:
   include:
-    - stage: compile
+    - stage: test
