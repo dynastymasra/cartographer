@@ -1,34 +1,33 @@
 language: go
-dist: bionic
 go:
   - 1.14.x
 
-addons:
-  apt:
-    packages:
-      - libssl1.0.0
-
-before_install:
-  - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-  - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-  - rm seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
-install:
-  - git config --global http.https://gopkg.in.followRedirects true
-  - go mod tidy
-
 stages:
+  - compile
   - test
-
-test:
-  script:
-    - go get github.com/mattn/goveralls
-    - go get golang.org/x/tools/cmd/cover
-    - go test -race -v -cover $(go list ./... | grep -v /vendor/) -coverprofile=cartographer.coverage.out
-    - cat *.coverage.out >> coverage.out
-    - rm cartographer.coverage.out
-  after_success:
-    - bash <(curl -s https://codecov.io/bash)
+  - docker
 
 jobs:
   include:
     - stage: test
+      os: linux
+      dist: bionic
+      addons:
+        apt:
+          packages:
+            - libssl1.0.0
+      before_install:
+        - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+        - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+        - rm seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+      install:
+        - git config --global http.https://gopkg.in.followRedirects true
+        - go mod tidy
+      script:
+        - go get github.com/mattn/goveralls
+        - go get golang.org/x/tools/cmd/cover
+        - go test -race -v -cover $(go list ./... | grep -v /vendor/) -coverprofile=cartographer.coverage.out
+        - cat *.coverage.out >> coverage.out
+        - rm cartographer.coverage.out
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
