@@ -4,7 +4,7 @@
 [![Docker](https://img.shields.io/badge/docker-19.03-2885E4.svg)](https://www.docker.com/)
 [![Seabolt](https://img.shields.io/badge/seabolt-1.7.4-2885E4.svg)](https://github.com/neo4j-drivers/seabolt)
 [![Build Status](https://travis-ci.org/dynastymasra/cartographer.svg?branch=master)](https://travis-ci.org/dynastymasra/cartographer)
-[![Coverage Status](https://coveralls.io/repos/github/dynastymasra/cartographer/badge.svg?branch=master)](https://coveralls.io/github/dynastymasra/cartographer?branch=master)
+[![codecov](https://codecov.io/gh/dynastymasra/cartographer/branch/master/graph/badge.svg)](https://codecov.io/gh/dynastymasra/cartographer)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dynastymasra/cartographer)](https://goreportcard.com/report/github.com/dynastymasra/cartographer)
 
 Service to serve information about Administrative Division a country
