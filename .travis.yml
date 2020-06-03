@@ -24,9 +24,9 @@ before_install:
 install:
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
-  - echo $PROJECT_NAME
-  - echo $GIT_HASH
-  - echo $TAG
+  - echo "$PROJECT_NAME"
+  - echo "$GIT_HASH"
+  - echo "$TAG"
 
 stages:
   - test
