@@ -20,10 +20,11 @@ install:
   - go mod tidy
 script:
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+  - docker build -f Dockerfile -t cartographer:$TRAVIS_COMMIT .
+  - docker images
 
 stages:
   - test
-  - build
   - image
   - release
 
@@ -38,10 +39,6 @@ jobs:
         - rm cartographer.coverage.out
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-    - stage: build
-      script:
-        - docker build -f Dockerfile -t cartographer:$TRAVIS_COMMIT .
-        - docker images
     - stage: image
       script:
         - docker images
