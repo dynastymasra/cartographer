@@ -14,7 +14,7 @@ addons:
 env:
   global:
     - PROJECT_NAME=$TRAVIS_REPO_SLUG
-    - COMMIT=$TRAVIS_COMMIT
+    - GIT_HASH="$(git log -1 --pretty="%h")"
     - TAG=$TRAVIS_TAG
 
 before_install:
@@ -24,8 +24,8 @@ before_install:
 install:
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
-  - echo $TAG
-  - echo $COMMIT
+  - echo $PROJECT_NAME
+  - echo $GIT_HASH
   - echo $TAG
 
 stages:
@@ -46,10 +46,10 @@ jobs:
     - stage: staging
       script:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-        - docker build -f Dockerfile -t cartographer:$TRAVIS_COMMIT .
+        - docker build -f Dockerfile -t cartographer:$GIT_HASH .
         - docker images
-        - docker tag cartographer:$TRAVIS_COMMIT $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
-        - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
+        - docker tag cartographer:$GIT_HASH $DOCKER_USERNAME/cartographer:$GIT_HASH
+        - docker push $DOCKER_USERNAME/cartographer:$GIT_HASH
       only:
         - master
     - stage: release
