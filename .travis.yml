@@ -1,19 +1,59 @@
+os: linux
+dist: bionic
 language: go
-sudo: false
 go:
   - 1.14.x
-install:
-  - sudo apt-get install -y libssl1.0.0
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - libssl1.0.0
+
+env:
+  global:
+    - GIT_HASH=$(git log -1 $TRAVIS_COMMIT --pretty="%h")
+    - TAG=$TRAVIS_TAG
+
+before_install:
   - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
   - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
   - rm seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
+install:
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
-script:
-  - go get github.com/mattn/goveralls
-  - go get golang.org/x/tools/cmd/cover
-  - go test -race -v -cover $(go list ./... | grep -v /vendor/) -coverprofile=cartographer.coverage.out
-  - cat *.coverage.out >> coverage.out
-  - rm cartographer.coverage.out
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - echo "$TAG"
+
+stages:
+  - test
+  - name: staging
+    if: branch = master
+  - name: release
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - go get github.com/mattn/goveralls
+        - go get golang.org/x/tools/cmd/cover
+        - go test -race -v -cover $(go list ./... | grep -v /vendor/) -coverprofile=cartographer.coverage.out
+        - cat *.coverage.out >> coverage.out
+        - rm cartographer.coverage.out
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+    - stage: staging
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        - docker build -f Dockerfile -t cartographer:$GIT_HASH .
+        - docker images
+        - docker tag cartographer:$GIT_HASH $DOCKER_USERNAME/cartographer:$GIT_HASH
+        - docker push $DOCKER_USERNAME/cartographer:$GIT_HASH
+    - stage: release
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        - docker build -f Dockerfile -t cartographer:$TRAVIS_TAG .
+        - docker images
+        - docker tag cartographer:$TRAVIS_TAG $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
+        - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
