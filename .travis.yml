@@ -28,8 +28,11 @@ install:
 
 stages:
   - test
-  - staging
-  - release
+  - name: staging
+    if: branch = master
+  - name: release
+    if: tag IS present
+
 jobs:
   include:
     - stage: test
