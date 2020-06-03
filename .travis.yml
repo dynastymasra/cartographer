@@ -29,9 +29,7 @@ install:
 stages:
   - test
   - staging
-    if: branch = master
   - release
-    if: tag IS present
 jobs:
   include:
     - stage: test
