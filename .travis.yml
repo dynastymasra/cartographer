@@ -26,6 +26,7 @@ install:
 stages:
   - build
   - test
+  - repo
   - release
 
 jobs:
@@ -43,7 +44,8 @@ jobs:
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build -f Dockerfile -t cartographer .
-    - script:
+    - stage: repo
+      script:
         - docker images
         - docker tag cartographer $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT .
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
