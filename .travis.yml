@@ -11,6 +11,12 @@ addons:
     packages:
       - libssl1.0.0
 
+env:
+  global:
+    - PROJECT_NAME=$TRAVIS_REPO_SLUG
+    - COMMIT=$TRAVIS_COMMIT
+    - TAG=$TRAVIS_TAG
+
 before_install:
   - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
   - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
@@ -18,12 +24,14 @@ before_install:
 install:
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
+  - echo $TAG
+  - echo $COMMIT
+  - echo $TAG
 
 stages:
   - test
-  - image
+  - staging
   - release
-
 jobs:
   include:
     - stage: test
@@ -35,15 +43,15 @@ jobs:
         - rm cartographer.coverage.out
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-    - stage: image
+    - stage: staging
       script:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - docker build -f Dockerfile -t cartographer:$TRAVIS_COMMIT .
         - docker images
         - docker tag cartographer:$TRAVIS_COMMIT $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
-      on:
-        tags: false
+      only:
+        - master
     - stage: release
       script:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
@@ -51,5 +59,5 @@ jobs:
         - docker images
         - docker tag cartographer:$TRAVIS_TAG $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_TAG
-      on:
-        tags: true
+      only:
+        - tags
