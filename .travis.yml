@@ -13,7 +13,7 @@ addons:
 
 env:
   global:
-    - GIT_HASH=$(git log -1 --pretty="%h")
+    - GIT_HASH=$(git log -1 $TRAVIS_COMMIT --pretty="%h")
     - TAG=$TRAVIS_TAG
 
 before_install:
