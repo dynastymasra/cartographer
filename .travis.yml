@@ -14,7 +14,7 @@ addons:
 env:
   global:
     - PROJECT_NAME=$TRAVIS_REPO_SLUG
-    - GIT_HASH=$(git log -1 $TRAVIS_COMMIT --pretty="%h")
+    - GIT_HASH=$(git log -1 --pretty="%h")
     - TAG=$TRAVIS_TAG
 
 before_install:
@@ -31,7 +31,9 @@ install:
 stages:
   - test
   - staging
+    if: tag IS blank
   - release
+    if: tag IS present
 jobs:
   include:
     - stage: test
