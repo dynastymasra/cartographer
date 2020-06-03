@@ -22,6 +22,8 @@ before_install:
 install:
   - git config --global http.https://gopkg.in.followRedirects true
   - go mod tidy
+script:
+  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 stages:
   - test
@@ -41,7 +43,6 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
     - stage: build
       script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build -f Dockerfile -t cartographer .
     - script:
         - docker images
