@@ -28,6 +28,7 @@ script:
 stages:
   - test
   - build
+  - image
   - release
 
 jobs:
@@ -43,8 +44,9 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
     - stage: build
       script:
-        - docker build -f Dockerfile -t cartographer .
-    - script:
+        - docker build -f Dockerfile -t cartographer:$TRAVIS_COMMIT .
+    - stage: image
+      script:
         - docker images
         - docker tag cartographer $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT .
         - docker push $DOCKER_USERNAME/cartographer:$TRAVIS_COMMIT
