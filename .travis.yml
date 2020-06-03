@@ -13,6 +13,7 @@ script:
   - go get github.com/mattn/goveralls
   - go get golang.org/x/tools/cmd/cover
   - go test -race -v -cover $(go list ./... | grep -v /vendor/) -coverprofile=cartographer.coverage.out
-  - cat *.coverage.out >> coverage.txt
+  - cat *.coverage.out >> coverage.out
+  - rm cartographer.coverage.out
 after_success:
   - bash <(curl -s https://codecov.io/bash)
