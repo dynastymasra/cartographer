@@ -16,11 +16,6 @@ env:
     - GIT_HASH=$(git log -1 $TRAVIS_COMMIT --pretty="%h")
     - TAG=$TRAVIS_TAG
 
-branches:
-  only:
-    - master
-    - tags
-
 before_install:
   - wget https://github.com/neo4j-drivers/seabolt/releases/download/v1.7.4/seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
   - sudo dpkg -i seabolt-1.7.4-Linux-ubuntu-$(lsb_release -rs).deb
