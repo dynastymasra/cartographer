@@ -20,6 +20,7 @@ import (
 func init() {
 	config.Load()
 	config.Logger().Setup()
+
 }
 
 func main() {
